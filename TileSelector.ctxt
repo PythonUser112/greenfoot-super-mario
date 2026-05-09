@@ -1,0 +1,11 @@
+#BlueJ class context
+comment0.target=TileSelector
+comment1.params=world\ tilename
+comment1.target=TileSelector(greenfoot.World,\ java.lang.String)
+comment2.params=world\ tilename\ height
+comment2.target=void\ buildTileSelector(greenfoot.World,\ java.lang.String,\ int)
+comment3.params=world
+comment3.target=void\ buildAll(greenfoot.World)
+comment4.params=
+comment4.target=void\ action()
+numComments=5

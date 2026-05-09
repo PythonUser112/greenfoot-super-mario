@@ -1,0 +1,12 @@
+#BlueJ class context
+comment0.target=BoxShape
+comment0.text=\n\ A\ rectangle\ shape\ collision\ object.\n\ \n\ @author\ buddha\n\ @version\ 1\n
+comment1.params=parent\ sizex\ sizey
+comment1.target=BoxShape(CollisionObject,\ int,\ int)
+comment2.params=parent
+comment2.target=BoxShape(CollisionObject)
+comment3.params=other
+comment3.target=boolean\ isColliding(BoxShape)
+comment4.params=other
+comment4.target=boolean\ isColliding(CollisionShape)
+numComments=5

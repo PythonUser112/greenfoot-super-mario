@@ -1,0 +1,8 @@
+#BlueJ class context
+comment0.target=CollisionShape
+comment0.text=\n\ Abstract\ base\ class\ for\ CollisionObjects\ that\ can\ detect\ collisions.\n\ \n\ @author\ buddha\n\ @version\ 1\n
+comment1.params=parent
+comment1.target=CollisionShape(CollisionObject)
+comment2.params=other
+comment2.target=boolean\ isColliding(CollisionShape)
+numComments=3

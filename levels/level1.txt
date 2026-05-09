@@ -1,0 +1,8 @@
+1, 5, Ground
+2, 5, Ground
+3, 5, Ground
+4, 5, Ground
+1, 1, Brick
+2, 1, Brick
+4, 1, QuestionBlockCoin
+6, 5, Platform

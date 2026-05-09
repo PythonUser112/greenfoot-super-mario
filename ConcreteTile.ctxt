@@ -1,0 +1,9 @@
+#BlueJ class context
+comment0.target=ConcreteTile
+comment1.params=collisionLayer\ collisionMask\ filename
+comment1.target=ConcreteTile(int,\ int,\ java.lang.String)
+comment2.params=
+comment2.target=void\ registerTiles()
+comment3.params=
+comment3.target=void\ register()
+numComments=4

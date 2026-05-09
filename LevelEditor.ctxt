@@ -1,0 +1,21 @@
+#BlueJ class context
+comment0.target=LevelEditor
+comment1.params=
+comment1.target=LevelEditor()
+comment2.params=
+comment2.target=void\ action()
+comment3.params=label
+comment3.target=void\ instanceLabel(Label)
+comment4.params=label
+comment4.target=void\ disposeLabel(Label)
+comment5.params=title
+comment5.target=void\ instanceTitle(Label)
+comment6.params=title
+comment6.target=void\ disposeTitle(Label)
+comment7.params=level
+comment7.target=void\ loadLevel(java.lang.String)
+comment8.params=level
+comment8.target=void\ saveLevel(java.lang.String)
+comment9.params=name
+comment9.target=void\ newTile(java.lang.String)
+numComments=10

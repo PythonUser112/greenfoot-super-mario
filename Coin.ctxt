@@ -1,0 +1,5 @@
+#BlueJ class context
+comment0.target=Coin
+comment1.params=delta
+comment1.target=void\ process(double)
+numComments=2

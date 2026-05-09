@@ -1,0 +1,11 @@
+#BlueJ class context
+comment0.target=Image
+comment1.params=filename
+comment1.target=Image(java.lang.String)
+comment2.params=
+comment2.target=void\ act()
+comment3.params=
+comment3.target=boolean\ isFading()
+comment4.params=
+comment4.target=void\ fade()
+numComments=5

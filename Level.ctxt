@@ -1,0 +1,19 @@
+#BlueJ class context
+comment0.target=Level
+comment1.params=background
+comment1.target=Level(java.lang.String)
+comment2.params=
+comment2.target=Level()
+comment3.params=level
+comment3.target=void\ loadLevel(java.lang.String)
+comment4.params=
+comment4.target=void\ titleTransition()
+comment5.params=label
+comment5.target=void\ instanceLabel(Label)
+comment6.params=label
+comment6.target=void\ disposeLabel(Label)
+comment7.params=title
+comment7.target=void\ instanceTitle(Label)
+comment8.params=title
+comment8.target=void\ disposeTitle(Label)
+numComments=9
