@@ -9,13 +9,13 @@ public class TileSelector extends Button
         this.tilename = tilename;
         Tile tile = Tile.instanceTile(tilename, 0, 0);
         setImage(tile.filename);
-        getImage().scale(32, 32);
+        getImage().scale(getImage().getWidth() * Level.SELECTOR_SCALE, getImage().getHeight() * Level.SELECTOR_SCALE);
     }
 
     public static void buildTileSelector(World world, String tilename, int height)
     {
         TileSelector selector = new TileSelector(world, tilename);
-        world.addObject(selector, world.getWidth() - 16, height);
+        world.addObject(selector, world.getWidth() - 16 * Level.SELECTOR_SCALE, height);
     }
 
     public static void buildAll(World world)

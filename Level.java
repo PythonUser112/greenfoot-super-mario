@@ -6,8 +6,6 @@ import java.util.ArrayList;
 
 abstract public class Level extends TextWorld
 {
-    public int globx = -16;
-    public int globy = -16;
     public static final String levelDirectory = "levels/";
 
     // Kollisionserkennung
@@ -16,8 +14,17 @@ abstract public class Level extends TextWorld
     public static final int LAYER_ITEM        = 4;
     public static final int LAYER_ENEMIES     = 8;
 
+    // Skalierung
+    public static final int SELECTOR_SCALE = 1;
+    public static final int TILE_SCALE = 3;
+
+    // Bewegungsverhalten
+    public static final int GRAVITY = 4 * TILE_SCALE; // 4 Pixel PRO SEKUNDE IM QUADRAT!!!
+
     private GreenfootSound currentBackground;
     private int frame = 0;
+    public int globx = -8 * TILE_SCALE;
+    public int globy = -8 * TILE_SCALE;
 
     public Level(String background)
     {
@@ -30,14 +37,14 @@ abstract public class Level extends TextWorld
 
     public Level()
     {
-        super(1024, 600, 1, false, Color.RED);
+        super(1024, 600, 1, false, Color.RED, false, 50, 1000 / 24);
         setPaintOrder(Mario.class, Tile.class, Item.class);
     }
 
     public void loadLevel(String level)
     {
-        globx = -16;
-        globy = -16;
+        globx = -8 * TILE_SCALE;
+        globy = -8 * TILE_SCALE;
         Tile.registerAll();
         String filename = levelDirectory + level + ".txt";
         Path path = Path.of(filename);
@@ -47,8 +54,8 @@ abstract public class Level extends TextWorld
             for(int i = 0; i < fileContent.length; i++) {
                 if(!fileContent[i].isBlank()) {
                     String[] tile = fileContent[i].split(",");
-                    int tileX = Integer.parseInt(tile[0].trim()) * 32;
-                    int tileY = Integer.parseInt(tile[1].trim()) * 32;
+                    int tileX = Integer.parseInt(tile[0].trim()) * 16 * TILE_SCALE;
+                    int tileY = Integer.parseInt(tile[1].trim()) * 16 * TILE_SCALE;
                     String tileName = tile[2].trim();
                     if(Tile.hasTile(tileName)) {
                         Tile instance = Tile.instanceTile(tileName, tileX, tileY);
@@ -70,7 +77,7 @@ abstract public class Level extends TextWorld
             System.err.println(" has no file!");
             return;
         }
-        showTitle(10);
+        showTitle(20);
     }
 
     public void titleTransition()

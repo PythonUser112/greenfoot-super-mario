@@ -1,0 +1,9 @@
+#BlueJ class context
+comment0.target=AbstractTile
+comment1.params=filename\ klass
+comment1.target=AbstractTile(java.lang.String,\ CollisionObject)
+comment2.params=world
+comment2.target=void\ addedToWorld(greenfoot.World)
+comment3.params=
+comment3.target=void\ registerTiles()
+numComments=4

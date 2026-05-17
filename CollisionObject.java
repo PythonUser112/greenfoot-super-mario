@@ -1,4 +1,5 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+
 /**
  * A simple CollisionObject that handles collision on some layers.
  * 
@@ -14,11 +15,15 @@ public abstract class CollisionObject extends Actor
 
     public int x;
     public int y;
+
     private long lastCall;
 
-    private CollisionObject lastCollider;
-    private CollisionObject ground;
-    private int lastgroundx, lastgroundy;
+    private int stepx = 0;
+    private int stepy = 0;
+    private int lastdx = 0;
+    private int lastdy = 0;
+
+    private CollisionObject collider;
 
     public CollisionObject(int collisionLayers, int collisionMasks)
     {
@@ -70,10 +75,14 @@ public abstract class CollisionObject extends Actor
 
     private boolean stepx(int sx) {
         this.x += sx;
+        stepx++;
         setLocation(this.x - getWorldOfType(Level.class).globx, this.y - getWorldOfType(Level.class).globy);
-        lastCollider = (CollisionObject) touching(CollisionObject.class);
-        if(lastCollider != null) {
+        CollisionObject curr = (CollisionObject) touching(CollisionObject.class);
+        if(curr != null) {
+            collider = curr;
             this.x -= sx;
+            stepx--;
+            setLocation(this.x - getWorldOfType(Level.class).globx, this.y - getWorldOfType(Level.class).globy);
             return true;
         }
         return false;
@@ -81,36 +90,43 @@ public abstract class CollisionObject extends Actor
 
     private boolean stepy(int sy) {
         this.y += sy;
+        stepy++;
         setLocation(this.x - getWorldOfType(Level.class).globx, this.y - getWorldOfType(Level.class).globy);
-        lastCollider = (CollisionObject) touching(CollisionObject.class);
-        if(lastCollider != null) {
-            this.y -= sy;
+        CollisionObject curr = (CollisionObject) touching(CollisionObject.class);
+        if(curr != null) {
+            while(curr != null) {
+                collider = curr;
+                this.y -= sy;
+                setLocation(this.x - getWorldOfType(Level.class).globx, this.y - getWorldOfType(Level.class).globy);
+                curr = (CollisionObject) touching(CollisionObject.class);
+            }
+            stepy--;
             return true;
         }
         return false;
     }
 
-    private boolean move(int dx, int dy)
+    private boolean _move(int dx, int dy)
     {
-        int x = this.x + dx;
-        int y = this.y + dy;
-        int sx = Math.abs(dx) / dx;
-        int sy = Math.abs(dy) / dy;
-        int step = 0;
+        int sx = (int) Math.signum(dx);
+        int sy = (int) Math.signum(dy);
+        dx = Math.abs(dx);
+        dy = Math.abs(dy);
+        stepx = 0;
+        stepy = 0;
+        collider = null;
         if(dx == 0) {
-            while(step <= Math.abs(dy)) {
-                if(!stepy(sx)) {
+            while(stepy < dy) {
+                if(stepy(sy)) {
                     return true;
                 }
-                step++;
             }
         }
         else if(dy == 0) {
-            while(step <= Math.abs(dx)) {
-                if(!stepx(sx)) {
+            while(stepx < dx) {
+                if(stepx(sx)) {
                     return true;
                 }
-                step++;
             }
         }
         else {
@@ -119,27 +135,19 @@ public abstract class CollisionObject extends Actor
             boolean xblocked = false;
             boolean yblocked = false;
             do {
-                if(!xblocked && !yblocked) {
-                    tmpx = this.x;
-                    tmpy = this.y;
+                if(!xblocked && !yblocked && stepx < dx && stepy < dy) {
                     e2 = 2 * err;
                     if(e2 > -dy) {
                         err -= dy;
-                        this.x += sx;
+                        xblocked = stepx(sx);
+                        stepx++;
                     }
                     if(e2 < dx) {
                         err += dx;
-                        this.y += sy;
-                    }
-                    setLocation(this.x - getWorldOfType(Level.class).globx, this.y - getWorldOfType(Level.class).globy);
-                    lastCollider = (CollisionObject) touching(CollisionObject.class);
-                    if(lastCollider != null) {
-                        this.x = tmpx;
-                        this.y = tmpy;
-                        return true;
+                        yblocked = stepy(sy);
                     }
                 }
-                else if(xblocked) {
+                else if(xblocked || stepx == dx) {
                     yblocked = stepy(sy);
                     if(yblocked) {
                         return true;
@@ -151,36 +159,59 @@ public abstract class CollisionObject extends Actor
                         return true;
                     }
                 }
-            } while(this.x != x || this.y != y);
-            return xblocked || yblocked;
+            } while(stepx < dx && stepy < dy);
+            return xblocked;
         }
         return false;
     }
 
-    private void slide()
+    public boolean isOnGround()
     {
-        y += 1;
-        ground = (CollisionObject) touching(CollisionObject.class);
-        y -= 1;
-        if(ground != null) {
-            move(ground.x - this.x, ground.y - this.y);
+        if(stepy(1)) {
+            return true;
         }
+        this.y--;
+        return false;
     }
 
-    public boolean isOnFloor()
+    public CollisionObject getCollider()
     {
-        return ground != null;
+        return collider;
+    }
+
+    public boolean moveAndCollide(int dx, int dy)
+    {
+        boolean collision = _move(dx, dy);
+        lastdx = stepx;
+        lastdy = stepy;
+        return collision;
     }
 
     public boolean moveAndSlide(int dx, int dy)
     {
-        slide();
-        return move(dx, dy);
+        boolean collision = _move(dx, dy);
+        lastdx = stepx * (int) Math.signum(dx);
+        lastdy = stepy * (int) Math.signum(dy);
+        CollisionObject last = collider;
+        if(isOnGround()) {
+            int sx = (int) Math.signum(collider.dx());
+            int sy = (int) Math.signum(collider.dy());
+            collision = collision || _move(collider.dx(), collider.dy());
+            lastdx += stepx * sx;
+            lastdy += stepy * sy;
+            collider = last;
+        }
+        return collision;
     }
 
-    public CollisionObject getSlideCollision()
+    public int dx()
     {
-        return lastCollider;
+        return lastdx;
+    }
+
+    public int dy()
+    {
+        return lastdy;
     }
 
     public void setX(int x)

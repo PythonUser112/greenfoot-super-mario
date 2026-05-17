@@ -1,7 +1,7 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.util.HashMap;
 
-public abstract sealed class Tile extends CollisionObject permits ConcreteTile {
+public abstract sealed class Tile extends MarioObject permits ConcreteTile, AbstractTile {
     public static HashMap<String, Class> subclasses = new HashMap();
     private int fadeFrame = 0;
     private boolean fading = true;
@@ -12,9 +12,6 @@ public abstract sealed class Tile extends CollisionObject permits ConcreteTile {
         super(collisionLayer, collisionMask);
         this.filename = filename;
         setImage(filename);
-        getImage().setTransparency(0);
-        getImage().scale(getImage().getWidth() * 2, getImage().getHeight() * 2);
-        setCollisionShape(new BoxShape(this));
     }
 
     public static final Tile instanceTile(String klass, int x, int y)
@@ -40,6 +37,7 @@ public abstract sealed class Tile extends CollisionObject permits ConcreteTile {
     public static final void registerAll()
     {
         ConcreteTile.registerTiles();
+        AbstractTile.registerTiles();
     }
 
     public static final boolean hasTile(String klass)

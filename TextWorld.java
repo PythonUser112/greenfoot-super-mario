@@ -8,48 +8,67 @@ abstract public class TextWorld extends World
     private Label title;
     private int speed = 50;
     private long last_frame;
-    static final int DELTA = 20;
+    final int delta_target;
     static final int FRAMES = 3;
     private int frame = FRAMES;
 
-    public TextWorld(int width, int height, int cell, boolean border)
-    {
-        super(width, height, cell, border);
-        title = new Label(formatClassname(getClass().getName()), 30, Color.WHITE);
-        title.hide();
-        addObject(title, getWidth() / 2, getHeight() / 2);
-    }
-
     public TextWorld(int width, int height, int cell)
     {
-        super(width, height, cell, true);
-        title = new Label(formatClassname(getClass().getName()), 30, Color.WHITE);
-        title.hide();
-        addObject(title, getWidth() / 2, getHeight() / 2);
+        this(width, height, cell, true, Color.WHITE, false, 30, 20);
     }
 
-    public TextWorld(int width, int height, int cell, boolean border, Color titleColor)
+    public TextWorld(int width, int height, int cell, boolean border)
     {
-        super(width, height, cell, border);
-        title = new Label(formatClassname(getClass().getName()), 30, titleColor);
-        title.hide();
-        addObject(title, getWidth() / 2, getHeight() / 2);
+        this(width, height, cell, border, Color.WHITE, false, 30, 20);
+    }
+
+    public TextWorld(int width, int height, int cell, int delta_target)
+    {
+        this(width, height, cell, true, Color.WHITE, false, 30, delta_target);
+    }
+
+    public TextWorld(int width, int height, int cell, boolean border, int delta_target)
+    {
+        this(width, height, cell, border, Color.WHITE, false, 30, delta_target);
     }
 
     public TextWorld(int width, int height, int cell, Color titleColor)
     {
-        super(width, height, cell, true);
-        title = new Label(formatClassname(getClass().getName()), 30, titleColor);
-        title.hide();
-        addObject(title, getWidth() / 2, getHeight() / 2);
+        this(width, height, cell, true, titleColor, false, 30, 20);
+    }
+
+    public TextWorld(int width, int height, int cell, Color titleColor, int delta_target)
+    {
+        this(width, height, cell, true, titleColor, false, 30, delta_target);
+    }
+
+    public TextWorld(int width, int height, int cell, boolean border, Color titleColor)
+    {
+        this(width, height, cell, border, titleColor, false, 30, 20);
+    }
+
+    public TextWorld(int width, int height, int cell, boolean border, Color titleColor, int delta_target)
+    {
+        this(width, height, cell, border, titleColor, false, 30, delta_target);
     }
 
     public TextWorld(int width, int height, int cell, boolean border, Color titleColor, boolean rainbowFlicker)
     {
+        this(width, height, cell, border, titleColor, rainbowFlicker, 30, 20);
+    }
+
+    public TextWorld(int width, int height, int cell, boolean border, Color titleColor, boolean rainbowFlicker, int delta_target)
+    {
+        this(width, height, cell, border, titleColor, rainbowFlicker, 30, delta_target);
+    }
+
+    public TextWorld(int width, int height, int cell, boolean border, Color titleColor, boolean rainbowFlicker, int titleSize, int delta_target)
+    {
         super(width, height, cell, border);
-        title = new Label(formatClassname(getClass().getName()), 30, titleColor, rainbowFlicker);
+        title = new Label(formatClassname(getClass().getName()), titleSize, titleColor, rainbowFlicker);
         title.hide();
         addObject(title, getWidth() / 2, getHeight() / 2);
+        this.delta_target = delta_target;
     }
 
     public static String formatClassname(String input)
@@ -115,14 +134,14 @@ abstract public class TextWorld extends World
             if(label.getX() == x && label.getY() == y) {
                 if(text == "") {
                     texts.remove(i);
-                    disposeLabel(label);
+                    removeObject(label);
                 }
                 else {
                     label.setText(text);
                     label.setFontSize(textSize);
                     label.setFontColor(color);
+                    return;
                 }
-                return;
             }
         }
         createText(text, x, y, textSize, color);
@@ -143,11 +162,12 @@ abstract public class TextWorld extends World
     {
         if(frame-- == 0) {
             long delta = System.currentTimeMillis() - last_frame;
-            double diff = (double) (delta - DELTA * FRAMES) / 1000.0;
-            if(diff > 2) {
+            double diff = (double) (delta - delta_target * FRAMES);
+            System.out.println();
+            if(diff > 2 * FRAMES) {
                 speed += (int) Math.log10(diff);
             }
-            else if(diff < -2) {
+            else if(diff < -2 * FRAMES) {
                 speed -= (int) Math.log10(-diff);
             }
             last_frame = System.currentTimeMillis();
@@ -179,10 +199,26 @@ abstract public class TextWorld extends World
         }
     }
 
+    void instanceLabel(Label label)
+    {
+        label.startFadeIn();
+    }
+
+    void disposeLabel(Label label)
+    {
+        label.startFadeOut();
+    }
+
+    void instanceTitle(Label title)
+    {
+        title.startFadeIn();
+    }
+
+    void disposeTitle(Label title)
+    {
+        title.startFadeOut();
+    }
+
     public void titleTransition() {}
-    abstract void action();
-    abstract void disposeLabel(Label label);
-    abstract void instanceLabel(Label label);
-    abstract void disposeTitle(Label title);
-    abstract void instanceTitle(Label title);
+    public void action() {}
 }

@@ -11,7 +11,7 @@ public class Intro extends World
     {
         super(1024, 600, 1);
         Greenfoot.start();
-        title = new Image("title");
+        title = new Image("title_with_alpha");
         addObject(title, getWidth() / 2, getHeight() / 2);
         background = new GreenfootSound("title.wav");
         background.setVolume(45);

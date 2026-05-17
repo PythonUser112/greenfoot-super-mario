@@ -2,7 +2,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 public abstract sealed class QuestionBlock extends ConcreteTile permits QuestionBlockCoin {
     static final int collisionLayer = Level.LAYER_ENVIRONMENT;
-    static final int collisionMask = Level.LAYER_PLAYER | Level.LAYER_ENEMIES | Level.LAYER_ITEM;
+    static final int collisionMask = Level.LAYER_PLAYER | Level.LAYER_ENEMIES;
     static final String filename = "platform-q1.png";
 
     public boolean loaded = true;
@@ -21,8 +21,10 @@ public abstract sealed class QuestionBlock extends ConcreteTile permits Question
 
     public void addedToWorld(World world)
     {
-        act();
-        world.addObject(itemToUnload, getX(), getY());
+        if(world.getClass() != LevelEditor.class) {
+            act();
+            world.addObject(itemToUnload, getX(), getY());
+        }
     }
 
     @Override
@@ -33,7 +35,6 @@ public abstract sealed class QuestionBlock extends ConcreteTile permits Question
         if(loaded) {
             currentTime += delta;
             if(currentTime >= frameTime) {
-                int transparency = getImage().getTransparency();
                 currentTime -= frameTime;
                 if(frameDirection) {
                     if(frame++ == 3) {
@@ -48,8 +49,6 @@ public abstract sealed class QuestionBlock extends ConcreteTile permits Question
                     }
                 }
                 setImage("platform-q" + frame + ".png");
-                getImage().setTransparency(transparency);
-                getImage().scale(getImage().getWidth() * 2, getImage().getHeight() * 2);
             }
         }
     }

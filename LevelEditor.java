@@ -43,7 +43,7 @@ public class LevelEditor extends Level
                 }
             }
             else if(!Greenfoot.mouseClicked(null)) {
-                currentTile.setPosition((int) Math.round((mouse.getX() + globx) / 32.0) * 32, (int) Math.round((mouse.getY() + globy) / 32.0) * 32);
+                currentTile.setPosition((int) Math.round((mouse.getX() + globx) / (16.0 * Level.TILE_SCALE)) * 16 * Level.TILE_SCALE, (int) Math.round((mouse.getY() + globy) / (16.0 * Level.TILE_SCALE)) * 16 * Level.TILE_SCALE);
                 return;
             }
             else {
@@ -61,7 +61,7 @@ public class LevelEditor extends Level
                     else {
                         currentTile = null;
                     }
-                    while(Greenfoot.isKeyDown("z"));
+                    while(Greenfoot.isKeyDown("z")) {}
                 }
             }
         }
@@ -83,6 +83,8 @@ public class LevelEditor extends Level
             dragStartX = x;
             dragStartY = y;
         }
+        updateText(Integer.toString(globx), getWidth() / 2 - 20, 30, Color.YELLOW);
+        updateText(Integer.toString(globy), getWidth() / 2 + 20, 30, Color.CYAN);
     }
 
     void instanceLabel(Label label)
@@ -114,8 +116,8 @@ public class LevelEditor extends Level
 
     public void saveLevel(String level)
     {
-        globx = 0;
-        globy = 0;
+        globx = -8 * TILE_SCALE;
+        globy = -8 * TILE_SCALE;
         String filename = levelDirectory + level + ".txt";
         Path path = Path.of(filename);
         ArrayList<Tile> objects = new ArrayList();
@@ -123,9 +125,9 @@ public class LevelEditor extends Level
             String content = "";
             java.util.List<Tile> tiles = getObjects(Tile.class);
             for(int i = 0; i < tiles.size(); i++) {
-                content += tiles.get(i).x / 16;
+                content += tiles.get(i).x / (16 * Level.TILE_SCALE);
                 content += ", ";
-                content += tiles.get(i).y / 16;
+                content += tiles.get(i).y / (16 * Level.TILE_SCALE);
                 content += ", ";
                 content += tiles.get(i).getClass().getName();
                 content += "\n";

@@ -1,6 +1,6 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
-abstract public class Item extends CollisionObject
+abstract public class Item extends MarioObject
 {
     static final int collisionLayer = Level.LAYER_ITEM;
     static final int collisionMask = Level.LAYER_PLAYER | Level.LAYER_ENVIRONMENT;
@@ -11,8 +11,6 @@ abstract public class Item extends CollisionObject
     {
         super(collisionLayer, collisionMask);
         getImage().setTransparency(0);
-        getImage().scale(getImage().getWidth() * 2, getImage().getHeight() * 2);
-        setCollisionShape(new BoxShape(this));
     }
 
     public void dropOff()

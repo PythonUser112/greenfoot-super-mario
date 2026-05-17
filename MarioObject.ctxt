@@ -1,0 +1,7 @@
+#BlueJ class context
+comment0.target=MarioObject
+comment1.params=collisionLayer\ collisionMask
+comment1.target=MarioObject(int,\ int)
+comment2.params=filename
+comment2.target=void\ setImage(java.lang.String)
+numComments=3

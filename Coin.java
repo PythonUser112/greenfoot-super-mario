@@ -13,7 +13,6 @@ public class Coin extends Item
         super.process(delta);
         currentTime += delta;
         if(currentTime >= frameTime) {
-            int transparency = getImage().getTransparency();
             currentTime -= frameTime;
             if(frameDirection) {
                 if(frame++ == 3) {
@@ -28,8 +27,6 @@ public class Coin extends Item
                 }
             }
             setImage("coin" + frame + ".png");
-            getImage().setTransparency(transparency);
-            getImage().scale(getImage().getWidth() * 2, getImage().getHeight() * 2);
         }
     }
 }
