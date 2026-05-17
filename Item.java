@@ -3,14 +3,15 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 abstract public class Item extends MarioObject
 {
     static final int collisionLayer = Level.LAYER_ITEM;
-    static final int collisionMask = Level.LAYER_PLAYER | Level.LAYER_ENVIRONMENT;
+    static final int collisionMaskWithoutEnv = Level.LAYER_PLAYER;
+    static final int collisionMaskWithEnv = Level.LAYER_PLAYER | Level.LAYER_ENVIRONMENT;
     private int fadeFrame = 0;
     private boolean fading = true;
     private boolean dropoff = true;
 
-    public Item()
+    public Item(boolean collidesWithEnvironment)
     {
-        super(collisionLayer, collisionMask);
+        super(collisionLayer, collidesWithEnvironment ? collisionMaskWithEnv : collisionMaskWithoutEnv);
         getImage().setTransparency(0);
     }
 
@@ -27,7 +28,6 @@ abstract public class Item extends MarioObject
         }
         if(dropoff && fadeFrame++ < 15) {
             setY(getY() - Level.TILE_SCALE);
-            System.out.println(getY());
         }
         if(fadeFrame == 15) {
             dropoff = false;

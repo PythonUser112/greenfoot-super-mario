@@ -163,7 +163,6 @@ abstract public class TextWorld extends World
         if(frame-- == 0) {
             long delta = System.currentTimeMillis() - last_frame;
             double diff = (double) (delta - delta_target * FRAMES);
-            System.out.println();
             if(diff > 2 * FRAMES) {
                 speed += (int) Math.log10(diff);
             }

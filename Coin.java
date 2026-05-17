@@ -6,6 +6,11 @@ public class Coin extends Item
     private double currentTime = 0;
     private int frame = 1;
 
+    public Coin()
+    {
+        super(false);
+    }
+
     @Override
     public final void process(double delta)
     {
