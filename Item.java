@@ -6,6 +6,7 @@ abstract public class Item extends MarioObject
     static final int collisionMask = Level.LAYER_PLAYER | Level.LAYER_ENVIRONMENT;
     private int fadeFrame = 0;
     private boolean fading = true;
+    private boolean dropoff = true;
 
     public Item()
     {
@@ -15,7 +16,7 @@ abstract public class Item extends MarioObject
 
     public void dropOff()
     {
-        
+        dropoff = true;
     }
 
     @Override
@@ -23,6 +24,15 @@ abstract public class Item extends MarioObject
     {
         if(fading && fadeFrame++ < 15) {
             getImage().setTransparency(fadeFrame * 17);
+        }
+        if(dropoff && fadeFrame++ < 15) {
+            setY(getY() - Level.TILE_SCALE);
+            System.out.println(getY());
+        }
+        if(fadeFrame == 15) {
+            dropoff = false;
+            fading = false;
+            fadeFrame = 0;
         }
     }
 }

@@ -2,6 +2,8 @@
 comment0.target=Enemy
 comment1.params=baseFilename\ direction\ speed
 comment1.target=Enemy(java.lang.String,\ boolean,\ int)
-comment2.params=delta
-comment2.target=void\ process(double)
-numComments=3
+comment2.params=
+comment2.target=void\ die()
+comment3.params=delta
+comment3.target=void\ process(double)
+numComments=4

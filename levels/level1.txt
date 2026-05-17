@@ -21,3 +21,4 @@
 7, 0, GumbaRightSpawn
 5, 2, GumbaBlueLeftSpawn
 7, 2, GumbaBlueRightSpawn
+12, 2, QuestionBlockCoin

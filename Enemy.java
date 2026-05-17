@@ -12,6 +12,7 @@ abstract public class Enemy extends MarioObject
     private final String baseFilename;
     private int speed;
     private double dy;
+    private boolean dying;
 
     Enemy(String baseFilename, boolean direction, int speed)
     {
@@ -26,26 +27,50 @@ abstract public class Enemy extends MarioObject
         this.speed = speed;
     }
 
+    public void die()
+    {
+        dying = true;
+        frame = 0;
+        setImage(baseFilename + "die.png");
+    }
+
     @Override
     public final void process(double delta)
     {
         super.process(delta);
         currentTime += delta;
         if(currentTime >= frameTime) {
-            currentTime -= frameTime;
-            frame = 3 - frame;
-            setImage(baseFilename + frame + ".png");
+            if(!dying) {
+                currentTime -= frameTime;
+                frame = 3 - frame;
+                setImage(baseFilename + frame + ".png");
+            }
+            else {
+                if(frame++ == 16) {
+                    getWorld().removeObject(this);
+                    return;
+                }
+                if((frame % 2) == 1) {
+                    setImage(baseFilename + "die.png");
+                }
+                else {
+                    setImage(baseFilename + "1.png");
+                }
+            }
         }
-        if(isOnGround()) {
-            dy = 0;
-        }
-        else { 
-            dy += Level.GRAVITY * delta;
-        }
-        if(moveAndSlide(speed, (int) Math.round(dy))) {
-            speed = -speed;
-            getImage().mirrorHorizontally();
-            currentTime = 0;
+        if(!dying) {
+            if(isOnGround()) {
+                dy = 0;
+            }
+            else { 
+                dy += Level.GRAVITY * delta;
+            }
+            if(moveAndSlide(speed, (int) Math.round(dy))) {
+                speed = -speed;
+                getImage().mirrorHorizontally();
+                currentTime = 0;
+            }
+        }else {
         }
     }
 }

@@ -224,6 +224,16 @@ public abstract class CollisionObject extends Actor
         this.y = y;
     }
 
+    public int getX()
+    {
+        return x;
+    }
+
+    public int getY()
+    {
+        return y;
+    }
+
     public void setPosition(int x, int y)
     {
         setX(x);

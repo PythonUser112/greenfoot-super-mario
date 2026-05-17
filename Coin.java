@@ -4,7 +4,6 @@ public class Coin extends Item
 {
     static final double frameTime = 0.2;
     private double currentTime = 0;
-    private boolean frameDirection = true;
     private int frame = 1;
 
     @Override
@@ -14,17 +13,8 @@ public class Coin extends Item
         currentTime += delta;
         if(currentTime >= frameTime) {
             currentTime -= frameTime;
-            if(frameDirection) {
-                if(frame++ == 3) {
-                    frame = 2;
-                    frameDirection = false;
-                }
-            }
-            else {
-                if(frame-- == 1) {
-                    frame = 2;
-                    frameDirection = true;
-                }
+            if(frame++ == 3) {
+                frame = 1;
             }
             setImage("coin" + frame + ".png");
         }
