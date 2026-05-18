@@ -92,12 +92,12 @@ public class Mario extends MarioObject
                 die();
             }
         }
-        if(collider.getClass().isAssignableFrom(QuestionBlock.class)) {
+        try {
             QuestionBlock block = (QuestionBlock) collider;
             System.out.println(block.loaded);
             if(block.loaded && dy < 0) {
                 block.unload();
             }
-        }
+        } catch(ClassCastException e) {}
     }
 }
