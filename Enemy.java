@@ -5,7 +5,7 @@ abstract public class Enemy extends MarioObject
     static final int collisionLayer = Level.LAYER_ENEMIES;
     static final int collisionMask = Level.LAYER_ENVIRONMENT | Level.LAYER_ENEMIES;
 
-    static final double frameTime = 0.4;
+    private double frameTime = 0.4;
     private double currentTime = 0;
     private int frame = 1;
 
@@ -31,7 +31,9 @@ abstract public class Enemy extends MarioObject
     {
         dying = true;
         frame = 0;
+        frameTime = 0.05;
         setImage(baseFilename + "die.png");
+        disableCollisions();
     }
 
     @Override
@@ -40,8 +42,8 @@ abstract public class Enemy extends MarioObject
         super.process(delta);
         currentTime += delta;
         if(currentTime >= frameTime) {
+            currentTime -= frameTime;
             if(!dying) {
-                currentTime -= frameTime;
                 frame = 3 - frame;
                 setImage(baseFilename + frame + ".png");
             }

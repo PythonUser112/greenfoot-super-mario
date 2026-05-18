@@ -8,5 +8,8 @@ public class Level1 extends Level
         setPaintOrder(Mario.class, Tile.class, Item.class);
     }
 
-    public void action() {}
+    public void action()
+    {
+        super.action();
+    }
 }

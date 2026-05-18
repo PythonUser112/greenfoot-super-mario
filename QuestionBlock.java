@@ -24,7 +24,6 @@ public abstract sealed class QuestionBlock extends ConcreteTile permits Question
         if(world.getClass() != LevelEditor.class) {
             act();
             world.addObject(itemToUnload, getX(), getY());
-            unload();
         }
     }
 

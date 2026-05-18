@@ -20,11 +20,16 @@ abstract public class Level extends TextWorld
 
     // Bewegungsverhalten
     public static final int GRAVITY = 4 * TILE_SCALE; // 4 Pixel PRO SEKUNDE IM QUADRAT!!!
+    public static final int MOVESPEED = 64 * TILE_SCALE; // 4 Blöcke / 64 Pixel PRO SEKUNDE!!!
+    public static final int JUMPHEIGHT = 2 * TILE_SCALE;
 
     private GreenfootSound currentBackground;
     private int frame = 0;
     public int globx = -8 * TILE_SCALE;
     public int globy = -8 * TILE_SCALE;
+
+    private int newx = globx;
+    private int newy = globy;
 
     public Level(String background)
     {
@@ -33,12 +38,25 @@ abstract public class Level extends TextWorld
         currentBackground.playLoop();
         currentBackground.setVolume(0);
         loadLevel(getClass().getName().toLowerCase());
+        addObject(new Mario(), 0, 0);
+        Greenfoot.start();
     }
 
     public Level()
     {
         super(1024, 600, 1, false, Color.RED, false, 50, 1000 / 24);
         setPaintOrder(Mario.class, Tile.class, Item.class);
+        setActOrder(Mario.class, Enemy.class);
+    }
+
+    public void restart()
+    {
+        for(Actor actor : getObjects(MarioObject.class)) {
+            removeObject(actor);
+        }
+        frame = 0;
+        loadLevel(getClass().getName().toLowerCase());
+        addObject(new Mario(), 0, 0);
     }
 
     public void loadLevel(String level)
@@ -78,6 +96,19 @@ abstract public class Level extends TextWorld
             return;
         }
         showTitle(20);
+    }
+
+    @Override
+    public void action()
+    {
+        globx = newx;
+        globy = newy;
+    }
+
+    public void reposition(int x, int y)
+    {
+        newx = x - getWidth() / 2;
+        newy = y - getHeight() / 2;
     }
 
     public void titleTransition()

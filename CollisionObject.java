@@ -10,19 +10,17 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 public abstract class CollisionObject extends Actor
 {
     private CollisionShape shape = null;
-    private final int collisionLayers;
-    private final int collisionMasks;
+    public final int collisionLayers;
+    public final int collisionMasks;
+    private boolean collisionEnabled = true;
 
     public int x;
     public int y;
-
     private long lastCall;
-
     private int stepx = 0;
     private int stepy = 0;
     private int lastdx = 0;
     private int lastdy = 0;
-
     private CollisionObject collider;
 
     public CollisionObject(int collisionLayers, int collisionMasks)
@@ -30,11 +28,18 @@ public abstract class CollisionObject extends Actor
         this.collisionLayers = collisionLayers;
         this.collisionMasks = collisionMasks;
         this.lastCall = System.currentTimeMillis();
+        this.collisionEnabled = false;
     }
 
     public void setCollisionShape(CollisionShape shape)
     {
         this.shape = shape;
+        this.collisionEnabled = true;
+    }
+
+    public void disableCollisions()
+    {
+        this.collisionEnabled = false;
     }
 
     public boolean isTouching(Class klass)
@@ -44,7 +49,7 @@ public abstract class CollisionObject extends Actor
 
     private Actor touching(Class klass)
     {
-        if(shape == null) {
+        if(!collisionEnabled) {
             return null;
         }
         if(super.isTouching(klass)) {
@@ -57,7 +62,7 @@ public abstract class CollisionObject extends Actor
             for(int i = 0; i < intersecting.size(); i++) {
                 CollisionObject current = intersecting.get(i);
                 // Prüft, ob die CollisionShapes sich "erkennen" können und ineinander sind
-                if((current.collisionLayers & this.collisionMasks) > 0 && current.isIntersecting(this.shape)) {
+                if(current.collisionEnabled && (current.collisionLayers & this.collisionMasks) > 0 && current.isIntersecting(this.shape)) {
                     return current;
                 }
             }
@@ -174,6 +179,14 @@ public abstract class CollisionObject extends Actor
         return false;
     }
 
+    public CollisionObject getGround()
+    {
+        if(!isOnGround()) {
+            return null;
+        }
+        return collider;
+    }
+
     public CollisionObject getCollider()
     {
         return collider;
@@ -181,6 +194,10 @@ public abstract class CollisionObject extends Actor
 
     public boolean moveAndCollide(int dx, int dy)
     {
+        if(!collisionEnabled) {
+            setPosition(x + dx, y + dy);
+            return false;
+        }
         boolean collision = _move(dx, dy);
         lastdx = stepx;
         lastdy = stepy;
@@ -189,6 +206,10 @@ public abstract class CollisionObject extends Actor
 
     public boolean moveAndSlide(int dx, int dy)
     {
+        if(!collisionEnabled) {
+            setPosition(x + dx, y + dy);
+            return false;
+        }
         boolean collision = _move(dx, dy);
         lastdx = stepx * (int) Math.signum(dx);
         lastdy = stepy * (int) Math.signum(dy);
@@ -199,7 +220,9 @@ public abstract class CollisionObject extends Actor
             collision = collision || _move(collider.dx(), collider.dy());
             lastdx += stepx * sx;
             lastdy += stepy * sy;
-            collider = last;
+            if(!collision) {
+                collider = last;
+            }
         }
         return collision;
     }
